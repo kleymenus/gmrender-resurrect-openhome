@@ -31,7 +31,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
-#include <error.h>
 #include <string.h>
 #include <limits.h>
 #include <assert.h>
@@ -100,7 +99,6 @@ int webserver_register_file(const char *path, const char *content_type)
 
 	rc = stat(local_fname, &buf);
 	if (rc) {
-		error(0, errno, "Could not stat '%s'", local_fname);
 		return -1;
 	}
 
@@ -199,9 +197,7 @@ static int webserver_read(UpnpWebFileHandle fh, char *buf, size_t buflen)
 	len = minimum(buflen, file->len - file->pos);
 	memcpy(buf, file->contents + file->pos, len);
 
-	if (len < 0) {
-		error(0, errno, "%s failed", __FUNCTION__);
-	} else {
+	if (len >= 0) {
 		file->pos += len;
 	}
 
@@ -231,7 +227,6 @@ static int webserver_seek(UpnpWebFileHandle fh, off_t offset, int origin)
 	}
 
 	if (newpos < 0 || newpos > file->len) {
-		error(0, errno, "%s seek failed", __FUNCTION__);
 		return -1;
 	}
 
