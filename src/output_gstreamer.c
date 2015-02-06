@@ -354,7 +354,7 @@ static gboolean my_bus_callback(GstBus * bus, GstMessage * msg,
 				GstPad *audio_pad= NULL;
 				g_signal_emit_by_name (player_, "get-audio-pad", current_audio_num, &audio_pad);
 				if (audio_pad != NULL) {
-					GstCaps *caps = gst_pad_get_current_caps(audio_pad);
+					GstCaps *caps = gst_pad_get_negotiated_caps(audio_pad);
 					const GstStructure *str = gst_caps_get_structure (caps, 0);
 					gint bits = 0, channels = 0, rate = 0;
 
